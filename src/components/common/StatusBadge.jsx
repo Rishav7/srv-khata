@@ -1,5 +1,6 @@
-export default function StatusBadge({ status }) {
-  const value = String(status || '').toLowerCase()
+export default function StatusBadge({ status, outstanding }) {
+  const value = status ?? (Number(outstanding) > 0 ? 'outstanding' : 'paid')
+  const normalized = String(value || '').toLowerCase()
 
   const statusClass = {
     outstanding: 'status-badge--outstanding',
@@ -7,9 +8,16 @@ export default function StatusBadge({ status }) {
     pending: 'status-badge--pending',
   }
 
+  const label =
+    normalized === 'outstanding'
+      ? 'Outstanding'
+      : normalized === 'paid'
+        ? 'Paid'
+        : value || 'N/A'
+
   return (
-    <span className={`status-badge ${statusClass[value] || ''}`}>
-      {status || 'N/A'}
+    <span className={`status-badge ${statusClass[normalized] || ''}`}>
+      {label}
     </span>
   )
 }
